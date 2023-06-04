@@ -1,5 +1,9 @@
-from ua.models.Light import Light
+"""
+class Cadle inherits from the class Light
+"""
+from ua.models.light import Light
 
+# pylint: disable=too-many-arguments
 class Candle(Light):
     '''
         class Candle have this atributes:
@@ -12,33 +16,43 @@ class Candle(Light):
         class Cadle inherits from the class Light
         '''
 
-    def __init__(self, isBurning = False, form="Unknown", producer="Unknown", work_time_in_hours=0,
+    def __init__(self, is_burning=False, form="Unknown", producer="Unknown", work_time_in_hours=0,
                  height_in_mm=0):
         super().__init__(producer, work_time_in_hours, height_in_mm)
-        self.__isBurning = isBurning
+        self.__is_burning = is_burning
         self.__form = form
+        self.energy_set = {"paraffin", "wax"}
+
 
     def enable(self):
         '''
         light a candle
         '''
-        self.__isBurning = True
+        self.__is_burning = True
+        return self.__is_burning
 
     def diseble(self):
         '''
         extinguish the candle
         '''
-        self.__isBurning = False
+        self.__is_burning = False
 
     def __str__(self):
         return f"Candle(producer='{self.producer}',work time in hours={self.work_time_in_hours}," \
-               f" height in mm={self.height_in_mm} isBurninge={self.__isBurning}, form= '{self.__form}') "
+               f" height in mm={self.height_in_mm} isBurninge={self.__is_burning}, " \
+               f"form= '{self.__form}') "
 
     @property
     def work_time_in_hours(self):
+        """
+        getter of work_time_in_hours
+        :return:
+        """
         return self.__work_time_in_hours
 
     @work_time_in_hours.setter
     def work_time_in_hours(self, value):
+        """
+        setter of work_time_in_hours
+        """
         self.__work_time_in_hours = value
-

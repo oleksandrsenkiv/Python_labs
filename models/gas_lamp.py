@@ -1,6 +1,8 @@
-from ua.models.Light import Light
-
-
+"""
+class GasLamp inherits from the class Light
+"""
+from ua.models.light import Light
+# pylint: disable=too-many-arguments
 class GasLamp(Light):
     '''
         class GasLamp have this atributes:
@@ -13,17 +15,20 @@ class GasLamp(Light):
         class GasLamp inherits from the class Light
         '''
 
-    def __init__(self, is_burning=False, gas_consuption_per_litters=0, producer="Unknown", work_time_in_hours=0,
+    def __init__(self, is_burning=False, gas_consuption_per_litters=0,
+                 producer="Unknown", work_time_in_hours=0,
                  height_in_mm=0):
         super().__init__(producer, work_time_in_hours, height_in_mm)
         self.__is_burning = is_burning
         self.__gas_consuption_per_litters = gas_consuption_per_litters
+        self.energy_set = {"gas","gasoline"}
 
     def enable(self):
         '''
         Turn on the gas lamp (change eneble to True)
         '''
         self.__is_burning = True
+        return self.__is_burning
 
     def diseble(self):
         '''
@@ -33,10 +38,15 @@ class GasLamp(Light):
 
     def __str__(self):
         return f"GasLamp(producer='{self.producer}',work time in hours={self.work_time_in_hours}," \
-               f" height in mm={self.height_in_mm}, isBurninge={self.__is_burning}, gas consuption = {self.__gas_consuption_per_litters}') "
+               f" height in mm={self.height_in_mm}, isBurninge={self.__is_burning}, " \
+               f"gas consuption = {self.__gas_consuption_per_litters}') "
 
     @property
     def work_time_in_hours(self):
+        """
+        getter
+        :return:
+        """
         return self.__work_time_in_hours
 
     @work_time_in_hours.setter
