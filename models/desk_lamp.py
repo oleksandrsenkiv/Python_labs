@@ -3,8 +3,12 @@
 """
 
 from ua.models.light import Light
+from ua.exceptions.exceptions import EnableIsAlreadyOnExceptiion
+from ua.exceptions.exceptions import EnableIsAlreadyOffException
+from ua.exceptions.exceptions import DeskLampBrightnessExeption
+from ua.decorators.logged import logged
 # pylint: disable=too-many-arguments
-class DeskLamp(Light):
+class DeskLamp(Light, EnableIsAlreadyOnExceptiion, EnableIsAlreadyOffException, DeskLampBrightnessExeption):
     '''
     class DeskLamp have this atributes:
     is_on(shows that desk lamp is on/off), brightness, color,
@@ -18,6 +22,9 @@ class DeskLamp(Light):
     class DeskLamp inherits from the class Light
     '''
 
+
+
+    @logged(DeskLampBrightnessExeption,"console")
     def __init__(self, enable=False, brightness=5, color="White", producer="Unknown",
                  work_time_in_hours=0, height_in_mm=0):
         """
@@ -28,7 +35,12 @@ class DeskLamp(Light):
                 """
         super().__init__(producer, work_time_in_hours, height_in_mm)
         self.__enable = enable
-        self.__brightness = brightness
+        min_brightness, max_brightness = 1, 10
+        if min_brightness <= brightness <= max_brightness:
+            self.__brightness = brightness
+        else:
+            raise DeskLampBrightnessExeption(min_brightness, max_brightness, brightness)
+
         self.__color = color
         self.energy_set = {"electricity", "220V"}
 
@@ -43,18 +55,26 @@ class DeskLamp(Light):
             DeskLamp.instance = DeskLamp()
         return DeskLamp.instance
 
+    @logged(EnableIsAlreadyOnExceptiion,"file")
     def enable(self):
         '''
         light a gas lamp (change eneble to True)
         '''
-        self.__enable = True
-        return self.__enable
+        if self.__enable:
+            raise EnableIsAlreadyOnExceptiion()
 
+        else:
+            self.__enable = True
+
+    @logged(EnableIsAlreadyOffException,"console")
     def diseble(self):
         '''
         extinguish the gas lamp(change eneble to False)
         '''
-        self.__enable = False
+        if self.__enable == False:
+            raise EnableIsAlreadyOffException()
+        else:
+            self.__enable = False
 
     def set_color(self, color):
         """

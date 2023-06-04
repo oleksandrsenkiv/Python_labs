@@ -4,12 +4,18 @@ from ua.models.candle import Candle
 from ua.models.desk_lamp import DeskLamp
 from ua.models.flash_light import FlashLight
 from ua.managers.set_manager import SetManager
+from ua.exceptions.exceptions import EnableIsAlreadyOffException
+from ua.exceptions.exceptions import EnableIsAlreadyOnExceptiion
+from ua.exceptions.exceptions import DeskLampBrightnessExeption
 
 '''
 module with PenManager class
 '''
+
+
 # pylint: disable=super-init-not-called
-class PenManager(GasLamp, Candle, DeskLamp, FlashLight, Light, SetManager):
+class PenManager(GasLamp, Candle, DeskLamp, FlashLight, Light, SetManager, EnableIsAlreadyOnExceptiion,
+                 EnableIsAlreadyOffException, DeskLampBrightnessExeption):
     '''
      class PenManager inherits from the clasess GasLamp, Candle, DeskLamp, FlashLight, Light
      class PenManager contains methods:
@@ -111,7 +117,13 @@ class PenManager(GasLamp, Candle, DeskLamp, FlashLight, Light, SetManager):
                 '''
         objects = [lighting for lighting in self.lightings_list if
                    isinstance(lighting, Light) and hasattr(lighting, 'enable')]
-        results = [lighting.enable() for lighting in objects]
+        results = []
+        for lighting in objects:
+            try:
+                result = lighting.enable()
+            except EnableIsAlreadyOnExceptiion as e:
+                result = str(e)
+            results.append(result)
         return [(str(obj), result) for obj, result in zip(objects, results)]
 
     def get_attributes_by_type(self, attr_type):
@@ -150,13 +162,13 @@ class PenManager(GasLamp, Candle, DeskLamp, FlashLight, Light, SetManager):
 pen_manager = PenManager()
 
 pen_manager.add_lighting(GasLamp(False, 2, "Samsung", 12, 220))
-pen_manager.add_lighting(GasLamp(True, 3, "Sg", 15, 150), )
-pen_manager.add_lighting(DeskLamp(True, 5, "Yellow", "LG", 10, 155))
+pen_manager.add_lighting(GasLamp(False, 3, "Sg", 15, 150), )
+pen_manager.add_lighting(DeskLamp(False, 5, "Yellow", "LG", 10, 155))
 pen_manager.add_lighting(DeskLamp(False, 1, "Blue", "Xiaomi", 5, 200))
-pen_manager.add_lighting(Candle(True, "Round", "Jusk", 48, 100))
-pen_manager.add_lighting(Candle(True, "Cube", "Sinsay", 72, 120))
-pen_manager.add_lighting(FlashLight(True, 50, "RZTK", 6, 222))
-pen_manager.add_lighting(FlashLight(True, 100, "Oppo", 10, 300))
+pen_manager.add_lighting(Candle(False, "Round", "Jusk", 48, 100))
+pen_manager.add_lighting(Candle(False, "Cube", "Sinsay", 72, 120))
+pen_manager.add_lighting(FlashLight(False, 50, "RZTK", 6, 222))
+pen_manager.add_lighting(FlashLight(False, 100, "Oppo", 10, 300))
 
 filtered_list = pen_manager.find_lighting_with_work_time_more_than(10)
 filtered_list2 = pen_manager.find_lighting_with_height_in_mm_than(150)
@@ -209,3 +221,22 @@ print("any lightings have height more than 160 mm:",
 set_manager = SetManager(pen_manager)
 for item in set_manager:
     print(item)
+
+print("______________________________________________________________")
+print("Exceptions:")
+desk_lamp = DeskLamp(True, 5, "Yellow", "LG", 10, 155)
+try:
+    desk_lamp.enable()
+except EnableIsAlreadyOnExceptiion as e:
+    result = print(str(e))
+
+desk_lamp2 = DeskLamp(False, 5, "Yellow", "LG", 10, 155)
+try:
+    desk_lamp2.diseble()
+except EnableIsAlreadyOffException as e:
+    result = print(str(e))
+
+try:
+    desk_lamp3 = DeskLamp(False, 11, "Yellow", "LG", 10, 155)
+except DeskLampBrightnessExeption as e:
+    print(str(e))

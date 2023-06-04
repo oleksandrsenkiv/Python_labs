@@ -1,6 +1,8 @@
 '''
 Modulu with SetManager class
 '''
+
+
 class SetManager:
     """SetManager class for managing and iterating over energy sets in the PenManager.
 
@@ -26,6 +28,7 @@ class SetManager:
         pen_manager constructor
         '''
         self.pen_manager = pen_manager
+        self.index = 0
 
     def __iter__(self):
         """Iterator method for iterating over the energy sets of the lighting objects.
@@ -52,17 +55,34 @@ class SetManager:
         return length
 
     def __getitem__(self, index):
-        """Returns the element at the specified index in the combined energy sets.
+        """
+                Returns the item at the specified index in the concatenated sets of objects.
 
                 Args:
-                    index (int): The index of the element to retrieve.
+                    index (int): The index of the item to retrieve.
 
                 Returns:
-                    Any: The element at the specified index.
-
+                    object: The item at the specified index.
                 """
-        return list(self.__iter__())[index]
+        sets = [lighting.energy_set for lighting in self.pen_manager.lightings_list]
+        item_list = [item for item_set in sets for item in item_set]
+        return item_list[index]
 
     def __next__(self):
-        """Raises the StopIteration exception to signal the end of iteration."""
-        raise StopIteration()
+        """
+        Returns the next item in the concatenated sets of objects.
+
+        Returns:
+            object: The next item.
+
+        Raises:
+            StopIteration: If there are no more items.
+        """
+        sets = [lighting.energy_set for lighting in self.pen_manager.lightings_list]
+        item_list = [item for item_set in sets for item in item_set]
+        if self.index < len(item_list):
+            item = item_list[self.index]
+            self.index += 1
+            return item
+        else:
+            raise StopIteration
