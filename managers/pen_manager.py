@@ -1,12 +1,12 @@
-from ua.models.light import Light
-from ua.models.gas_lamp import GasLamp
-from ua.models.candle import Candle
-from ua.models.desk_lamp import DeskLamp
-from ua.models.flash_light import FlashLight
-from ua.managers.set_manager import SetManager
-from ua.exceptions.exceptions import EnableIsAlreadyOffException
-from ua.exceptions.exceptions import EnableIsAlreadyOnExceptiion
-from ua.exceptions.exceptions import DeskLampBrightnessExeption
+from models.light import Light
+from models.gas_lamp import GasLamp
+from models.candle import Candle
+from models.desk_lamp import DeskLamp
+from models.flash_light import FlashLight
+from managers.set_manager import SetManager
+from exceptions.exceptions import EnableIsAlreadyOffException
+from exceptions.exceptions import EnableIsAlreadyOnExceptiion
+from exceptions.exceptions import DeskLampBrightnessExeption
 
 '''
 module with PenManager class
@@ -59,7 +59,7 @@ class PenManager(GasLamp, Candle, DeskLamp, FlashLight, Light, SetManager, Enabl
                 '''
         return iter(self.lightings_list)
 
-    def __getitem__(self, item):
+    def __getitem__(self, index):
         '''
                 Get the item at the specified index in the lightings_list.
 
