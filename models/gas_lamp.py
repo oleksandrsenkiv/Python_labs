@@ -1,9 +1,9 @@
 """
 class GasLamp inherits from the class Light
 """
-from ua.models.light import Light
-from ua.exceptions.exceptions import EnableIsAlreadyOffException
-from ua.exceptions.exceptions import EnableIsAlreadyOnExceptiion
+from models.light import Light
+from exceptions.exceptions import EnableIsAlreadyOffException
+from exceptions.exceptions import EnableIsAlreadyOnExceptiion
 # pylint: disable=too-many-arguments
 class GasLamp(Light,EnableIsAlreadyOnExceptiion,EnableIsAlreadyOffException):
     '''
