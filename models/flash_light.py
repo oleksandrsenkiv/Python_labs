@@ -1,9 +1,9 @@
 """
 class FlashLight inherits from the class Light
 """
-from ua.models.light import Light
-from ua.exceptions.exceptions import EnableIsAlreadyOnExceptiion
-from ua.exceptions.exceptions import EnableIsAlreadyOffException
+from models.light import Light
+from exceptions.exceptions import EnableIsAlreadyOnExceptiion
+from exceptions.exceptions import EnableIsAlreadyOffException
 
 # pylint: disable=too-many-arguments
 class FlashLight(Light,EnableIsAlreadyOnExceptiion,EnableIsAlreadyOffException):
