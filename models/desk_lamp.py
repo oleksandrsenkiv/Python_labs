@@ -2,11 +2,11 @@
  class DeskLamp inherits from the class Light
 """
 
-from ua.models.light import Light
-from ua.exceptions.exceptions import EnableIsAlreadyOnExceptiion
-from ua.exceptions.exceptions import EnableIsAlreadyOffException
-from ua.exceptions.exceptions import DeskLampBrightnessExeption
-from ua.decorators.logged import logged
+from models.light import Light
+from exceptions.exceptions import EnableIsAlreadyOnExceptiion
+from exceptions.exceptions import EnableIsAlreadyOffException
+from exceptions.exceptions import DeskLampBrightnessExeption
+from decorators.logged import logged
 # pylint: disable=too-many-arguments
 class DeskLamp(Light, EnableIsAlreadyOnExceptiion, EnableIsAlreadyOffException, DeskLampBrightnessExeption):
     '''
