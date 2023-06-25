@@ -1,9 +1,11 @@
 """
 class GasLamp inherits from the class Light
 """
-from ua.models.light import Light
+from models.light import Light
+from exceptions.exceptions import EnableIsAlreadyOffException
+from exceptions.exceptions import EnableIsAlreadyOnExceptiion
 # pylint: disable=too-many-arguments
-class GasLamp(Light):
+class GasLamp(Light,EnableIsAlreadyOnExceptiion,EnableIsAlreadyOffException):
     '''
         class GasLamp have this atributes:
         is_burning, gas_consuption_per_litters, work_time_in_hours, produser,height_in_mm.
@@ -25,16 +27,21 @@ class GasLamp(Light):
 
     def enable(self):
         '''
-        Turn on the gas lamp (change eneble to True)
+        light a gaslamp
         '''
-        self.__is_burning = True
-        return self.__is_burning
+        if self.__is_burning:
+            raise EnableIsAlreadyOnExceptiion()
+        else:
+            self.__is_burning = True
 
     def diseble(self):
         '''
-        Turn off the gas lamp (change eneble to False)
+        extinguish the gaslamp
         '''
-        self.__is_burning = False
+        if self.__is_burning == False:
+            raise EnableIsAlreadyOffException()
+        else:
+            self.__is_burning = False
 
     def __str__(self):
         return f"GasLamp(producer='{self.producer}',work time in hours={self.work_time_in_hours}," \

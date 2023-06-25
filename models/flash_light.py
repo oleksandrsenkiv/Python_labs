@@ -1,11 +1,12 @@
 """
 class FlashLight inherits from the class Light
 """
-from ua.models.light import Light
-
+from models.light import Light
+from exceptions.exceptions import EnableIsAlreadyOnExceptiion
+from exceptions.exceptions import EnableIsAlreadyOffException
 
 # pylint: disable=too-many-arguments
-class FlashLight(Light):
+class FlashLight(Light,EnableIsAlreadyOnExceptiion,EnableIsAlreadyOffException):
     '''
             class Candle have this atributes:
             enable, form, illumination_range_per_meters,work_time_in_hours, produser,height_in_mm.
@@ -30,14 +31,20 @@ class FlashLight(Light):
         '''
         turn on flashlight
         '''
-        self.__enable = True
-        return self.__enable
+        if self.__enable:
+            raise EnableIsAlreadyOnExceptiion()
+
+        else:
+            self.__enable = True
 
     def diseble(self):
         '''
-       turn off flashlight
+        turn off flashlight
         '''
-        self.__enable = False
+        if self.__enable == False:
+            raise EnableIsAlreadyOffException()
+        else:
+            self.__enable = False
 
     def __str__(self):
         return f"FlashLight(producer='{self.producer}'" \
